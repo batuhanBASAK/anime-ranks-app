@@ -3,6 +3,7 @@ import React, { createContext, useContext, useState } from 'react'
 import { GiHamburgerMenu } from "react-icons/gi";
 import { useNavigate } from 'react-router-dom';
 import { useUserContext } from '../context/userContext';
+import logoImage from '../assets/Gemini_Generated_Image_p3fpd0p3fpd0p3fp.png';
 
 
 const NavbarContext = createContext(null);
@@ -48,7 +49,7 @@ function Navbar() {
         <div className="container mx-auto h-full">
           <div className="h-full flex items-center justify-between gap-4">
             <NavbarButton styles="font-semibold tracking-wide text-white hover:text-neutral-100 transition-all duration-300 ease-in-out cursor-pointer relative before:absolute before:top-full before:left-0 before:h-1 before:bg-neutral-100 before:w-0 hover:before:w-full before:transition-all before:duration-300 before:ease-in-out flex items-center justify-center gap-2" to="/">
-              <img src="src/assets/Gemini_Generated_Image_p3fpd0p3fpd0p3fp.png" alt="logo image" className="w-8 h-8 rounded-full" />
+              <img src={logoImage} alt="logo image" className="w-8 h-8 rounded-full" />
               <span>AnimeRanks</span>
             </NavbarButton>
             {user ?

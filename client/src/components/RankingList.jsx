@@ -1,12 +1,11 @@
 import React from 'react'
 import { animeList } from '../animes'
 import { FaStar } from "react-icons/fa6";
+import { useNavigate } from 'react-router-dom';
 function RankingList() {
-
-  const handleNavigation = (e) => {
-    // STUB
-    e.preventDefault();
-    console.log("Hello, World");
+  const navigate = useNavigate();
+  const handleNavigation = (animeID) => {
+    navigate(`/anime/${animeID}`);
   }
 
 
@@ -16,7 +15,7 @@ function RankingList() {
       <ul>
         {animeList.map((anime, index) => (
           <li key={index} className="my-4">
-            <button onClick={handleNavigation} className="w-full h-16 border border-white border-collapse rounded-sm hover:shadow-white hover:shadow-xs flex flex-row items-center justify-between px-4 hover:bg-neutral-900 transition-all duration-150 ease-in-out cursor-pointer">
+            <button onClick={() => handleNavigation(anime.id)} className="w-full min-h-16 border border-white border-collapse rounded-sm hover:shadow-white hover:shadow-xs flex flex-row items-center justify-between px-4 hover:bg-neutral-900 transition-all duration-150 ease-in-out cursor-pointer">
               <h3>{anime.rank}. {anime.title}</h3>
               <div className="flex items-center gap-[0.125rem]">
                 <p>Overall Rating:</p>

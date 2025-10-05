@@ -1,8 +1,9 @@
 import React from 'react'
+import heroImage from '../assets/Gemini_Generated_Image_lbbrhrlbbrhrlbbr.png';
 
 function HeroSection() {
   const styles = {
-    backgroundImage: 'url("src/assets/Gemini_Generated_Image_lbbrhrlbbrhrlbbr.png")',
+    backgroundImage: `url(${heroImage})`,
   };
   return (
     <section className="h-96 w-full relative before:absolute before:top-0 before:left-0 before:w-full before:h-full before:bg-black before:opacity-50 before:z-0 bg-cover bg-no-repeat bg-center" style={styles}>
