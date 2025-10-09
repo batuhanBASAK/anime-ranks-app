@@ -10,7 +10,7 @@ const REFRESH_TOKEN_EXPIRATION_TIME_IN_MS =
   process.env.REFRESH_TOKEN_EXPIRATION_TIME_IN_MS;
 
 async function generateAccessToken(user) {
-  return jwt.sign({ userId: user._id }, ACCESS_TOKEN_SECRET, {
+  return jwt.sign({ userId: user._id, role: user.role }, ACCESS_TOKEN_SECRET, {
     expiresIn: ACCESS_TOKEN_EXPIRATION_TIME,
   });
 }
@@ -20,9 +20,13 @@ async function generateAccessToken(user) {
 // and returns the new refresh token.
 async function generateRefreshToken(user) {
   // 1. Create JWT refresh token (valid for 7 days)
-  const refreshToken = jwt.sign({ userId: user._id }, REFRESH_TOKEN_SECRET, {
-    expiresIn: REFRESH_TOKEN_EXPIRATION_TIME,
-  });
+  const refreshToken = jwt.sign(
+    { userId: user._id, role: user.role },
+    REFRESH_TOKEN_SECRET,
+    {
+      expiresIn: REFRESH_TOKEN_EXPIRATION_TIME,
+    }
+  );
 
   // 2. Save it to the database with TTL
   const expiresAt = new Date(Date.now() + REFRESH_TOKEN_EXPIRATION_TIME_IN_MS);

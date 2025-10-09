@@ -38,6 +38,10 @@ const userSchema = mongoose.Schema(
       ],
       default: [], // starts as empty list
     },
+    role: {
+      type: String,
+      default: "user", // it can be either "user" or "admin"
+    },
   },
   {
     timestamps: true, // automatically adds createdAt and updatedAt

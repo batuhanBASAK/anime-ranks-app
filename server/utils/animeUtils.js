@@ -1,6 +1,35 @@
 const Anime = require("../models/Anime");
 const User = require("../models/User");
 
+// Return anime information without including user rated the anime
+async function getAnime(slug) {
+  const anime = await Anime.findOne({ slug }).lean();
+  if (!anime) {
+    throw new Error("Anime not found in database!");
+  }
+
+  const animeInfo = {
+    title: anime.title,
+    slug: anime.slug,
+    overallRating: anime.overallRating,
+    rank: anime.rank,
+    ratings: {
+      1: anime.ratings[1].totalNumber,
+      2: anime.ratings[2].totalNumber,
+      3: anime.ratings[3].totalNumber,
+      4: anime.ratings[4].totalNumber,
+      5: anime.ratings[5].totalNumber,
+      6: anime.ratings[6].totalNumber,
+      7: anime.ratings[7].totalNumber,
+      8: anime.ratings[8].totalNumber,
+      9: anime.ratings[9].totalNumber,
+      10: anime.ratings[10].totalNumber,
+    },
+  };
+
+  return animeInfo;
+}
+
 // Updates the rank of the given anime in database
 async function updateRanking(animeID, newRank) {
   // Fetch all animes sorted by overallRating descending
@@ -136,6 +165,7 @@ async function updateOverallRating(animeID) {
 }
 
 module.exports = {
+  getAnime,
   updateRanking,
   addRating,
   updateRating,
