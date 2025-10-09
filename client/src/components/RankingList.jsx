@@ -10,7 +10,7 @@ function RankingList() {
 
 
   return (
-    <article>
+    <article className="p-4">
       <h2 className="text-3xl lg:text-4xl my-16 text-start lg:text-center">Ranking</h2>
       <ul>
         {animeList.map((anime, index) => (

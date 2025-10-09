@@ -10,8 +10,8 @@ function AnimePage() {
       <header>
         <Navbar />
       </header>
-      {anime ? (<main>
-        <h1>{anime.title}</h1>
+      {anime ? (<main className="container mx-auto p-4">
+        <h1 className="text-5xl">{anime.title}</h1>
 
 
 
