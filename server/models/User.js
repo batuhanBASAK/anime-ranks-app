@@ -20,6 +20,24 @@ const userSchema = mongoose.Schema(
       required: true,
       default: false,
     },
+    RatedAnimes: {
+      type: [
+        {
+          animeID: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Anime",
+            required: true,
+          },
+          rating: {
+            type: Number,
+            required: true,
+            min: 1,
+            max: 10,
+          },
+        },
+      ],
+      default: [], // starts as empty list
+    },
   },
   {
     timestamps: true, // automatically adds createdAt and updatedAt

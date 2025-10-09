@@ -36,7 +36,17 @@ async function generateRefreshToken(user) {
   return refreshToken;
 }
 
+// Deletes refresh token from database
+async function deleteRefreshToken(refreshToken) {
+  try {
+    await RefreshToken.deleteOne({ token: refreshToken });
+  } catch (err) {
+    console.error(err.message);
+  }
+}
+
 module.exports = {
   generateAccessToken,
   generateRefreshToken,
+  deleteRefreshToken,
 };
