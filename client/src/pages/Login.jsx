@@ -1,19 +1,36 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import Navbar from "../components/Navbar"
 import { NavLink } from 'react-router-dom'
+import Popup from '../components/Popup';
+import axios from 'axios';
+import { useAuthContext } from '../context/authContext';
 
 function Login() {
-
+  const { setAccessToken } = useAuthContext();
   const emailRef = useRef();
   const passwordRef = useRef();
 
-  const handleSubmit = (e) => {
+  const [openPopup, setOpenPopup] = useState(false);
+  const [popupMessage, setPopupMessage] = useState("");
+
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const email = emailRef.current.value;
     const password = passwordRef.current.value;
 
-    alert("email: " + email + " password: " + password);
+    try {
+      const res = await axios.post("http://localhost:3000/auth/login", { email, password }, { withCredentials: true });
+      console.log(res);
+      setPopupMessage(res.data.message);
+      setOpenPopup(true);
+      setAccessToken(res.data.accessToken);
+    } catch (err) {
+      const errorMessage = err.response?.data?.message || err.message;
+      setPopupMessage(errorMessage);
+      setOpenPopup(true);
+    }
   }
 
 
@@ -41,6 +58,7 @@ function Login() {
           </div>
         </form>
       </main>
+      <Popup open={openPopup} setOpen={setOpenPopup}>{popupMessage}</Popup>
     </div>
   )
 }

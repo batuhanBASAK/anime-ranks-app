@@ -5,7 +5,7 @@ const RefreshToken = require("../models/RefreshToken");
 const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET;
 const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET;
 
-async function checkAccessToken(req, res, next) {
+async function verifyAccessToken(req, res, next) {
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1];
 
@@ -15,14 +15,14 @@ async function checkAccessToken(req, res, next) {
 
   try {
     const decoded = jwt.verify(token, ACCESS_TOKEN_SECRET);
-    req.user = decoded;
+    req.userID = decoded.user;
     next();
   } catch (err) {
     return res.status(401).json({ message: "Invalid or expired access token" });
   }
 }
 
-async function checkRefreshToken(req, res, next) {
+async function verifyRefreshToken(req, res, next) {
   const refreshToken = req.cookies?.refreshToken;
 
   if (!refreshToken) {
@@ -43,7 +43,7 @@ async function checkRefreshToken(req, res, next) {
     }
 
     // 3. Attach user data to request
-    req.user = decoded;
+    req.userID = decoded.user;
 
     // 4. Proceed to next
     next();
@@ -55,6 +55,6 @@ async function checkRefreshToken(req, res, next) {
 }
 
 module.exports = {
-  checkAccessToken,
-  checkRefreshToken,
+  verifyAccessToken,
+  verifyRefreshToken,
 };

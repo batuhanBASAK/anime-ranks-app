@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState } from 'react'
 
 import { GiHamburgerMenu } from "react-icons/gi";
 import { useNavigate } from 'react-router-dom';
-import { useUserContext } from '../context/userContext';
+import { useAuthContext } from '../context/authContext';
 import logoImage from '../assets/Gemini_Generated_Image_p3fpd0p3fpd0p3fp.png';
 
 
@@ -35,7 +35,7 @@ function NavbarButton({ children, to, styles }) {
 
 
 function Navbar() {
-  const { user } = useUserContext();
+  const { user } = useAuthContext();
 
   const [open, setOpen] = useState(false);
   const toggle = () => {
@@ -52,18 +52,19 @@ function Navbar() {
               <img src={logoImage} alt="logo image" className="w-8 h-8 rounded-full" />
               <span>AnimeRanks</span>
             </NavbarButton>
-            {user ?
+            {user?.username ?
               (
-                <p className="font-semibold tracking-wide text-white hover:text-neutral-100 transition-all duration-300 ease-in-out">{user}</p>
+                <p className="font-semibold tracking-wide text-white hover:text-neutral-100 transition-all duration-300 ease-in-out">{user.username}</p>
               ) :
               (<ul className={styles}>
                 <li><NavbarButton styles="font-semibold tracking-wide text-white hover:text-neutral-100 transition-all duration-300 ease-in-out cursor-pointer relative before:absolute before:top-full before:left-0 before:h-1 before:bg-neutral-100 before:w-0 hover:before:w-full before:transition-all before:duration-300 before:ease-in-out" to="/login">Log In</NavbarButton></li>
                 <li><NavbarButton styles="font-semibold tracking-wide text-white hover:text-neutral-100 transition-all duration-300 ease-in-out cursor-pointer relative before:absolute before:top-full before:left-0 before:h-1 before:bg-neutral-100 before:w-0 hover:before:w-full before:transition-all before:duration-300 before:ease-in-out" to="/signup">Sign Up</NavbarButton></li>
               </ul>)
             }
-            <button onClick={toggle} className="cursor-pointer lg:hidden p-2 rounded-sm hover:bg-neutral-800 transition-all duration-300 ease-in-out">
+
+            {!user?.username && (<button onClick={toggle} className="cursor-pointer lg:hidden p-2 rounded-sm hover:bg-neutral-800 transition-all duration-300 ease-in-out">
               <GiHamburgerMenu />
-            </button>
+            </button>)}
           </div>
         </div>
       </nav>

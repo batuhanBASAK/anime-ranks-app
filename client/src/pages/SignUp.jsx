@@ -1,20 +1,52 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import Navbar from "../components/Navbar"
 import { NavLink } from "react-router-dom"
+import Popup from '../components/Popup';
+import axios from "axios";
 
 function SignUp() {
+  const usernameRef = useRef();
   const emailRef = useRef();
   const passwordRef = useRef();
   const password2Ref = useRef();
 
-  const handleSubmit = (e) => {
+  const [openPopup, setOpenPopup] = useState(false);
+  const [popupMessage, setPopupMessage] = useState("");
+
+  const displayPopupMessage = (message) => {
+    setPopupMessage(message);
+    setOpenPopup(true);
+  }
+
+  const clearInputValues = () => {
+    usernameRef.current.value = "";
+    emailRef.current.value = "";
+    passwordRef.current.value = "";
+    password2Ref.current.value = "";
+  }
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const username = usernameRef.current.value;
     const email = emailRef.current.value;
     const password = passwordRef.current.value;
     const password2 = password2Ref.current.value;
 
-    alert("email: " + email + " password: " + password + " password2: " + password2);
+    if (password !== password2) {
+      displayPopupMessage("Warning: Passwords aren't matching!");
+      clearInputValues();
+      return;
+    }
+
+    try {
+      const res = await axios.post("http://localhost:3000/auth/signup", { username, email, password });
+      displayPopupMessage(res.data.message);
+      clearInputValues();
+    } catch (err) {
+      displayPopupMessage(`Error: ${err.message}`);
+      clearInputValues();
+    }
   }
   return (
     <div>
@@ -25,6 +57,10 @@ function SignUp() {
         <form className="bg-neutral-900 text-white shadow-sm px-4 py-8 w-full md:w-xl" onSubmit={handleSubmit}>
           <h1 className="text-xl text-center uppercase tracking-wide mb-8">Sign Up</h1>
           <div className="flex flex-col w-full gap-6">
+            <div className="flex flex-col w-full gap-2">
+              <label className="font-bold text-sm" htmlFor="username">Username</label>
+              <input ref={usernameRef} className="border rounded-sm px-2 py-1 w-full text-base" type="text" name="username" placeholder='Please enter your username here' />
+            </div>
             <div className="flex flex-col w-full gap-2">
               <label className="font-bold text-sm" htmlFor="email">Email</label>
               <input ref={emailRef} className="border rounded-sm px-2 py-1 w-full text-base" type="email" name="email" placeholder='Please enter your email here' />
@@ -44,7 +80,10 @@ function SignUp() {
           </div>
         </form>
       </main>
-    </div>
+      <Popup open={openPopup} setOpen={setOpenPopup}>
+        {popupMessage}
+      </Popup>
+    </div >
   )
 }
 
