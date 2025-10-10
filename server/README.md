@@ -2,5 +2,5 @@
 
 ## TODO
 
-- [ ] Handling sign up
-- [ ] Handling login
+- [x] Handling sign up
+- [x] Handling login
