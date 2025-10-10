@@ -3,27 +3,35 @@ import { AuthContext } from "../context/authContext"
 import axios from "axios";
 
 function AuthContextProvider({ children }) {
-  const [user, setUser] = useState({});
   const [accessToken, setAccessToken] = useState(null);
+  const [user, setUser] = useState({});
+  const [refreshAccessToken, setRefreshAccessToken] = useState(true);
 
-  // Initially try to get an access token
   useEffect(() => {
+    if (!refreshAccessToken) {
+      return;
+    }
+
     const getAccessToken = async () => {
       try {
         const res = await axios.post("http://localhost:3000/auth/refresh", {}, { withCredentials: true });
-        setAccessToken(res.data.accessToken);
-      } catch (err) {
-        console.error("Failed to get access token:", err.response?.data?.message || err.message);
+        setAccessToken(() => res.data.accessToken);
+        console.log(`accessToken: ${res.data.accessToken}`);
+      } catch {
+        setAccessToken(() => null);
       }
+      setRefreshAccessToken(() => false);
     }
     getAccessToken();
-  }, []);
-
+  }, [refreshAccessToken]);
 
   useEffect(() => {
-    if (!accessToken) return;
-
+    // fetch user at each render
     const fetchUser = async () => {
+      if (!accessToken) {
+        setUser(() => { return {}; });
+        return;
+      }
       try {
         const res = await axios.get("http://localhost:3000/user", {
           withCredentials: true,
@@ -31,12 +39,11 @@ function AuthContextProvider({ children }) {
             Authorization: `Bearer ${accessToken}`,
           },
         });
-        setUser(res.data.user);
-      } catch (err) {
-        console.error("Failed to fetch user data:", err.response?.data?.message || err.message);
+        setUser(() => res?.data?.user);
+      } catch {
+        setUser(() => { return {}; });
       }
     };
-
     fetchUser();
   }, [accessToken]);
 

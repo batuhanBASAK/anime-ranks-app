@@ -2,7 +2,10 @@ require("dotenv").config();
 const express = require("express");
 const User = require("../models/User");
 const bcrypt = require("bcrypt");
-const { verifyRefreshToken } = require("../middlewares/authMiddleware");
+const {
+  verifyRefreshToken,
+  verifyAccessToken,
+} = require("../middlewares/authMiddleware");
 const {
   generateRefreshToken,
   generateAccessToken,
@@ -107,5 +110,23 @@ router.post("/refresh", verifyRefreshToken, async (req, res) => {
 });
 
 // logout
+router.post("/logout", verifyRefreshToken, async (req, res) => {
+  const userID = req.userID;
+  const refreshToken = req?.cookies?.refreshToken;
+  if (!userID || !refreshToken) {
+    return res.status(400).json({ message: "Missing credentials!" });
+  }
+
+  try {
+    await deleteRefreshToken(refreshToken);
+    res.clearCookie("refreshToken", {
+      httpOnly: true,
+      sameSite: "strict",
+    });
+    return res.status(200).json({ message: "logged out successfully" });
+  } catch (err) {
+    return res.status(401).json({ message: err.message });
+  }
+});
 
 module.exports = router;

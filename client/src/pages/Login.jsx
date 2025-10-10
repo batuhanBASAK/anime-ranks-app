@@ -4,15 +4,25 @@ import { NavLink } from 'react-router-dom'
 import Popup from '../components/Popup';
 import axios from 'axios';
 import { useAuthContext } from '../context/authContext';
+import { usePopupContext } from '../context/popupContext';
 
 function Login() {
   const { setAccessToken } = useAuthContext();
+  const { setOpen } = usePopupContext();
+
   const emailRef = useRef();
   const passwordRef = useRef();
 
-  const [openPopup, setOpenPopup] = useState(false);
-  const [popupMessage, setPopupMessage] = useState("");
 
+  const [popupTitle, setPopupTitle] = useState("");
+  const [popupMessage, setPopupMessage] = useState("");
+  const [popupButtonText, setPopupButtonText] = useState("");
+
+
+
+  const popupHandler = () => {
+    setOpen(() => false);
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -22,14 +32,14 @@ function Login() {
 
     try {
       const res = await axios.post("http://localhost:3000/auth/login", { email, password }, { withCredentials: true });
-      console.log(res);
-      setPopupMessage(res.data.message);
-      setOpenPopup(true);
-      setAccessToken(res.data.accessToken);
+      setAccessToken(() => res.data.accessToken);
     } catch (err) {
       const errorMessage = err.response?.data?.message || err.message;
-      setPopupMessage(errorMessage);
-      setOpenPopup(true);
+      setPopupTitle(() => "Warning!");
+      setPopupMessage(() => errorMessage);
+      setPopupButtonText(() => "Close");
+      setOpen(() => true);
+
     }
   }
 
@@ -58,7 +68,11 @@ function Login() {
           </div>
         </form>
       </main>
-      <Popup open={openPopup} setOpen={setOpenPopup}>{popupMessage}</Popup>
+      <Popup>
+        <Popup.Title>{popupTitle}</Popup.Title>
+        <Popup.Content>{popupMessage}</Popup.Content>
+        <Popup.Button onClick={popupHandler}>{popupButtonText}</Popup.Button>
+      </Popup>
     </div>
   )
 }

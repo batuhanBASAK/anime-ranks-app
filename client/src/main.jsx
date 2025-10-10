@@ -4,13 +4,17 @@ import './index.css'
 import App from './App.jsx'
 import { BrowserRouter } from 'react-router-dom'
 import AuthContextProvider from "./components/AuthContextProvider.jsx";
+import PopupContextProvider from './components/PopupContextProvider.jsx'
 
 createRoot(document.getElementById('root')).render(
-  <StrictMode>
-    <BrowserRouter>
-      <AuthContextProvider>
+  // <StrictMode>
+  <BrowserRouter>
+    <AuthContextProvider>
+      <PopupContextProvider>
         <App />
-      </AuthContextProvider>
-    </BrowserRouter>
-  </StrictMode>,
+      </PopupContextProvider>
+    </AuthContextProvider>
+  </BrowserRouter>
+  // </StrictMode>
+  ,
 )

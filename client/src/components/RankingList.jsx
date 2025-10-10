@@ -2,19 +2,13 @@ import React from 'react'
 import { animeList } from '../animes'
 import { FaStar } from "react-icons/fa6";
 import { useNavigate } from 'react-router-dom';
-import { useLayoutEffect } from 'react';
+
 function RankingList() {
-
-  useLayoutEffect(() => {
-
-  }, []);
-
 
   const navigate = useNavigate();
   const handleNavigation = (animeID) => {
     navigate(`/anime/${animeID}`);
   }
-
 
   return (
     <article className="p-4">
