@@ -3,16 +3,34 @@ import { Navigate, Outlet } from 'react-router-dom';
 import { useAuthContext } from '../context/authContext';
 
 export function NonUserRoute() {
-  const { user } = useAuthContext();
+  const { user, loading } = useAuthContext();
+
+  if (loading) {
+    return (
+      <div className="w-screen h-screen grid place-items-center">
+        <h1 className="font-semibold text-5xl">Loading...</h1>
+      </div>
+    )
+  }
+
   return (
-    user?.username ? <Navigate to="/" /> : <Outlet />
+    user?.username ? <Navigate to="/" replace /> : <Outlet />
   )
 }
 
 export function UserRoute() {
-  const { user } = useAuthContext();
+  const { user, loading } = useAuthContext();
+
+  if (loading) {
+    return (
+      <div className="w-screen h-screen grid place-items-center">
+        <h1 className="font-semibold text-5xl">Loading...</h1>
+      </div>
+    )
+  }
+
   return (
-    user?.username ? <Outlet /> : <Navigate to="/" />
+    user?.username ? <Outlet /> : <Navigate to="/" replace />
   )
 }
 

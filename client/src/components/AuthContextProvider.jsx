@@ -6,9 +6,12 @@ function AuthContextProvider({ children }) {
   const [accessToken, setAccessToken] = useState(null);
   const [user, setUser] = useState({});
   const [refreshAccessToken, setRefreshAccessToken] = useState(true);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    setLoading(() => true);
     if (!refreshAccessToken) {
+      setLoading(() => false);
       return;
     }
 
@@ -16,20 +19,23 @@ function AuthContextProvider({ children }) {
       try {
         const res = await axios.post("http://localhost:3000/auth/refresh", {}, { withCredentials: true });
         setAccessToken(() => res.data.accessToken);
-        console.log(`accessToken: ${res.data.accessToken}`);
       } catch {
         setAccessToken(() => null);
+      } finally {
+        setRefreshAccessToken(() => false);
+        setLoading(() => false);
       }
-      setRefreshAccessToken(() => false);
     }
     getAccessToken();
   }, [refreshAccessToken]);
 
   useEffect(() => {
+    setLoading(() => true);
     // fetch user at each render
     const fetchUser = async () => {
       if (!accessToken) {
         setUser(() => { return {}; });
+        setLoading(() => false);
         return;
       }
       try {
@@ -42,13 +48,15 @@ function AuthContextProvider({ children }) {
         setUser(() => res?.data?.user);
       } catch {
         setUser(() => { return {}; });
+      } finally {
+        setLoading(() => false);
       }
     };
     fetchUser();
   }, [accessToken]);
 
   return (
-    <AuthContext.Provider value={{ user, setUser, accessToken, setAccessToken }}>
+    <AuthContext.Provider value={{ user, setUser, accessToken, setAccessToken, loading, setLoading }}>
       {children}
     </AuthContext.Provider>
   )

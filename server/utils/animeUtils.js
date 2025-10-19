@@ -13,18 +13,19 @@ async function getAnime(slug) {
     slug: anime.slug,
     overallRating: anime.overallRating,
     rank: anime.rank,
-    ratings: {
-      1: anime.ratings[1].totalNumber,
-      2: anime.ratings[2].totalNumber,
-      3: anime.ratings[3].totalNumber,
-      4: anime.ratings[4].totalNumber,
-      5: anime.ratings[5].totalNumber,
-      6: anime.ratings[6].totalNumber,
-      7: anime.ratings[7].totalNumber,
-      8: anime.ratings[8].totalNumber,
-      9: anime.ratings[9].totalNumber,
-      10: anime.ratings[10].totalNumber,
-    },
+    totalRates: anime.totalRates,
+    ratings: [
+      anime.ratings[1].totalNumber,
+      anime.ratings[2].totalNumber,
+      anime.ratings[3].totalNumber,
+      anime.ratings[4].totalNumber,
+      anime.ratings[5].totalNumber,
+      anime.ratings[6].totalNumber,
+      anime.ratings[7].totalNumber,
+      anime.ratings[8].totalNumber,
+      anime.ratings[9].totalNumber,
+      anime.ratings[10].totalNumber,
+    ],
   };
 
   return animeInfo;

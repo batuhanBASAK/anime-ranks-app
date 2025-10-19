@@ -5,7 +5,7 @@
 - [ ] API related things
 
   - [x] Handle axios
-  - [ ] Handle displaying anime list by retrieving them from server
+  - [x] Handle displaying anime list by retrieving them from server
   - [ ] Handle pagination anime list by displaying only 10 anime per page
   - [ ] Create search bar that user can find anime from anime list
   - [ ] Handle user rating an anime
@@ -18,4 +18,4 @@
   - [x] Write a ProtectedRoute component for login and signup pages
 
 - [ ] Implementing admin related things
-  - [ ] Add new anime
+  - [x] Add new anime

@@ -16,6 +16,10 @@ const animeSchema = mongoose.Schema({
   rank: {
     type: Number,
   },
+  totalRates: {
+    type: Number,
+    default: 0,
+  },
   ratings: {
     1: {
       Users: {

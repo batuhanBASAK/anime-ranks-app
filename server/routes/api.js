@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const { getAnime } = require("../utils/animeUtils");
+const Anime = require("../models/Anime");
 
 // send anime
 // This one will return entire data of the anime
@@ -12,9 +13,10 @@ router.get("/anime/:slug", async (req, res) => {
 
   try {
     const animeInfo = await getAnime(slug);
+    console.log(animeInfo);
     return res.status(200).json({ animeInfo: animeInfo });
   } catch (err) {
-    return res.status(401).json({ message: err.message });
+    return res.status(500).json({ message: err.message });
   }
 });
 
@@ -41,13 +43,32 @@ router.get("/animes/:startIndex/:n", async (req, res) => {
 
     return res.status(200).json({ animes });
   } catch (err) {
-    return res.status(401).json({ message: err.message });
+    return res.status(500).json({ message: err.message });
   }
 });
 
-// add anime
-router.post("/anime", (req, res) => {
-  return res.status(200);
+// Add anime
+router.post("/add-anime", async (req, res) => {
+  const { title, slug } = req.body;
+
+  if (!title || !slug) {
+    return res.status(400).json({ message: "Title and slug are required." });
+  }
+
+  try {
+    const newAnime = new Anime({
+      title,
+      slug,
+    });
+
+    const savedAnime = await newAnime.save();
+    console.log("Saved anime:", savedAnime);
+
+    return res.status(201).json({ message: "Anime added successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error while adding anime" });
+  }
 });
 
 module.exports = router;

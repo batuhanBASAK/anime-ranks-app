@@ -6,6 +6,7 @@ import SignUp from './pages/SignUp';
 import AnimePage from "./pages/AnimePage";
 import { NonUserRoute, UserRoute } from './components/ProtectedRoute';
 import UserPage from './pages/UserPage';
+import AdminPage from './pages/AdminPage';
 
 function App() {
   return (
@@ -17,8 +18,9 @@ function App() {
       </Route>
       <Route element={<UserRoute />}>
         <Route path="/userpage" element={<UserPage />} />
+        <Route path="/adminpage" element={<AdminPage />} />
       </Route>
-      <Route path="/anime/:animeID" element={<AnimePage />} />
+      <Route path="/anime/:animeSlug" element={<AnimePage />} />
     </Routes>
   )
 }
